@@ -52,20 +52,20 @@ export default function StatsCards() {
         const Icon = stat.icon;
         
         return (
-          <Card key={index} className="animate-fade-in">
+          <Card key={index} className="animate-fade-in bg-gradient-to-br from-white to-blue-50 border-blue-200 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-slate-600">{stat.title}</p>
-                  <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-blue-700">{stat.title}</p>
+                  <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{stat.value}</p>
                 </div>
-                <div className={`w-12 h-12 ${stat.iconBg} rounded-lg flex items-center justify-center`}>
-                  <Icon className={`${stat.iconColor} h-6 w-6`} />
+                <div className={`w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg`}>
+                  <Icon className="text-white h-7 w-7" />
                 </div>
               </div>
               <div className="mt-4 flex items-center text-sm">
-                <span className="text-primary font-medium">{stat.change}</span>
-                <span className="text-slate-500 ml-1">{stat.changeText}</span>
+                <span className="text-green-600 font-semibold">{stat.change}</span>
+                <span className="text-blue-600 ml-1">{stat.changeText}</span>
               </div>
             </CardContent>
           </Card>

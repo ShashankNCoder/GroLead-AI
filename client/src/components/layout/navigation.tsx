@@ -47,17 +47,19 @@ export default function Navigation({ activeTab, onTabChange }: NavigationProps) 
   );
 
   return (
-    <header className="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-blue-50 via-white to-indigo-50 shadow-lg border-b border-blue-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-emerald-600 rounded-lg flex items-center justify-center">
-              <Brain className="h-5 w-5 text-white" />
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-all duration-200">
+              <Brain className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-900">GroLead AI</h1>
-              <p className="text-xs text-slate-500 hidden sm:block">Turn Every Lead Into Gold</p>
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                GroLead AI
+              </h1>
+              <p className="text-sm text-blue-600 font-medium hidden sm:block">Turn Every Lead Into Gold</p>
             </div>
           </div>
 
