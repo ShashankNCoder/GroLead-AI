@@ -7,6 +7,8 @@ import { scoreLeadWithAI } from "./openai";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const storage = new SupabaseStorage();
+  
   // Leads endpoints
   app.get("/api/leads", async (req, res) => {
     try {
