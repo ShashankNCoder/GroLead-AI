@@ -1,0 +1,202 @@
+🎯 Project Name: GroLead AI
+Tagline: “Turn Every Lead Into Gold – Smarter, Faster, Stronger”
+
+🧠 Overall Frontend Context (No Auth)
+The frontend of GroLead AI is a SaaS-style lead generation and scoring dashboard, designed to instantly empower GroMo Partners with tools for:
+
+Uploading or capturing leads from multiple sources
+
+Auto-scoring them using AI
+
+Engaging leads via WhatsApp in one click
+
+Managing follow-ups and tracking results visually
+
+There’s no login/signup — the tool works like a single-screen smart console. The focus is speed, clarity, action-first design, and zero learning curve for the user.
+
+🧭 App Navigation (Top Tab Layout)
+Dashboard
+
+Add Leads
+
+Score Leads
+
+Engage Leads
+
+Reports & Insights
+
+Settings (Light config)
+
+Keep the top nav bar sticky, with smooth transitions between sections (no page reloads).
+
+📊 1. Dashboard (Home Screen)
+Purpose: Give the partner an at-a-glance overview of lead performance.
+
+Elements:
+
+Stats cards:
+
+Leads Today
+
+Conversion Rate
+
+Avg. Lead Score
+
+Revenue This Month
+
+Kanban-style board:
+
+New → Contacted → Converted → Dropped
+
+Drag-and-drop friendly, color-coded
+
+High-priority lead panel:
+
+Auto-populated based on AI score >80
+
+Quick Action Buttons:
+
+Add Lead
+
+Import CSV
+
+Start Campaign
+
+Design Note: Use warm, active colors (green, orange, blue) with a soft glow to highlight active leads or tasks.
+
+📥 2. Add Leads (Input Hub)
+Purpose: Accept leads from different input modes, fast and flexibly.
+
+Tabs Inside:
+A. Upload Excel/CSV
+Drag-and-drop with smart validation
+
+Show sample structure & mapping tool
+
+Live preview of parsed data
+
+Real-time duplication checker (auto-merge suggestion)
+
+B. Manual Entry
+Auto-suggest city, product, and contact methods
+
+Toggle for “Repeat Lead?” — pre-fills known info
+
+Realtime validation (ex: mobile number length, income logic)
+
+C. Document Upload (OCR)
+Upload PDF, JPEG, PNG, Word
+
+Realtime extraction using OCR API
+
+Editable preview of extracted lead details
+
+Confidence scores on fields like “Name” or “Phone Number”
+
+D. Web Scraper
+Enter a public URL or choose from site presets (JustDial, IndiaMart, etc.)
+
+Preview extracted leads in a table
+
+Approve → Push to pipeline
+
+Design Note: Create a side-by-side visual layout: Source (left) → Parsed Lead Table (right). Use icons and animations to guide non-tech users.
+
+🎯 3. Score Leads (AI Analysis Hub)
+Purpose: Analyze and rank leads with contextual reasoning using GPT-4.
+
+Features:
+
+Realtime lead scoring on table
+
+Score columns: Score (0–100), Type (Hot/Warm/Cold/Low), AI Reason, Best Time to Contact
+
+On hover: Tooltip with GPT-4 reasoning (natural language summary)
+
+Manual override option with notes
+
+Batch score option with progress animation
+
+Filters: City, Product, Score Range, Status
+
+Design Note: Use AI-style animations (typewriting effect, pulse glow on updates) to showcase intelligence.
+
+💬 4. Engage Leads (WhatsApp Automation Panel)
+Purpose: Help partners send personalized WhatsApp messages quickly.
+
+Layout:
+Lead table with WhatsApp status icon (Not Sent / Sent / Read / Replied)
+
+Select leads → Choose Template → Customize Message (Name, Product, etc.)
+
+One-click send via 360Dialog API
+
+Message queue timeline with delivery tracking
+
+Auto-response suggestions
+
+Smart follow-up prompts based on past interaction
+
+Message Templates Include:
+
+Product Pitches
+
+Follow-Ups
+
+Festival Greetings
+
+Upselling / Cross-selling
+
+Design Note: Clean WhatsApp-style UI. Use green themes, chat bubbles, emojis, and media preview cards.
+
+📈 5. Reports & Insights
+Purpose: Show clear visual analytics and trends over time.
+
+Widgets:
+
+Bar: Leads added vs. Converted per week
+
+Pie: Lead Source Performance
+
+Line: Score vs. Conversion Rate
+
+Heatmap: Lead Density by Location
+
+Leaderboard: Top Products by Conversion
+
+Export Reports: CSV / PDF
+
+UX Enhancements:
+
+Animated graphs (Recharts / D3.js-like transitions)
+
+Tooltips on hover
+
+Data range selector
+
+“Recommendations” panel with GPT-4 insights
+
+⚙️ 6. Settings (Simple Configuration)
+API Key manager (hidden in dev or internal version)
+
+Message templates editor
+
+Lead field customizer (Add/remove fields like PAN, Aadhaar, etc.)
+
+Webhook listener toggle
+
+Data Export / Import (Cloud sync ready)
+
+🧠 UX Concepts Embedded in GroLead:
+Zero-friction design: Every click should feel useful.
+
+Color-coded actions: Green = safe, Red = warning, Blue = info
+
+Micro-feedback: Toasts, loading bars, AI response animations
+
+Mobile-first flow: Touch gestures for Kanban, drag/drop upload
+
+Human AI tone: GPT-4 outputs written like a smart assistant, not a robot
+
+📌 Summary
+The GroLead AI frontend should feel like a superpower dashboard for every field agent or partner – making them faster, smarter, and more confident with data and communication. The design removes complexity, focuses on lead actionability, and makes AI recommendations approachable. No login walls. No fluff. Just results.
