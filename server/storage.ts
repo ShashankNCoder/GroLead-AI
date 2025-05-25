@@ -118,6 +118,9 @@ export class MemStorage implements IStorage {
     const id = this.currentLeadId++;
     const lead: Lead = {
       ...insertLead,
+      source: insertLead.source || 'manual',
+      status: insertLead.status || 'new',
+      email: insertLead.email || null,
       id,
       aiScore: 0,
       aiReason: null,
@@ -199,6 +202,7 @@ export class MemStorage implements IStorage {
     const id = this.currentMessageId++;
     const message: WhatsappMessage = {
       ...insertMessage,
+      status: insertMessage.status || 'sent',
       id,
       sentAt: null,
       readAt: null

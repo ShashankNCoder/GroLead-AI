@@ -141,7 +141,7 @@ export default function MessageComposer({ selectedLeads, onMessageSent }: Messag
               <SelectValue placeholder="Select Template" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Custom Message</SelectItem>
+              <SelectItem value="custom">Custom Message</SelectItem>
               {templates.map((template) => (
                 <SelectItem key={template.id} value={template.id.toString()}>
                   {template.name}

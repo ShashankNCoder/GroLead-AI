@@ -145,10 +145,13 @@ export default function MessageTemplates() {
                 Add Template
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md" aria-describedby="create-template-description">
               <DialogHeader>
                 <DialogTitle>Create New Template</DialogTitle>
               </DialogHeader>
+              <div id="create-template-description" className="sr-only">
+                Create a new message template for WhatsApp campaigns
+              </div>
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="template-name">Template Name</Label>
