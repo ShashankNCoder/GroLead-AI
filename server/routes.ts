@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { SupabaseStorage } from "./supabase-storage";
+import { whatsappAPI, documentOCR, webScraper, aiLeadScoring } from "./api-integrations";
 import { insertLeadSchema, insertMessageTemplateSchema } from "@shared/schema";
 import { scoreLeadWithAI } from "./openai";
 import { z } from "zod";
