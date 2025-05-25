@@ -33,14 +33,17 @@ export default function ManualEntry() {
       name: "",
       phone: "",
       email: "",
+      address: "",
       city: "",
+      state: "",
+      pincode: "",
       product: "",
-      loanAmount: "",
-      monthlyIncome: "",
-      employmentType: "",
-      notes: "",
+      incomeLevel: "",
       source: "manual",
+      contactMethod: "",
+      pastInteractions: 0,
       status: "new",
+      notes: "",
       whatsappStatus: "not_sent",
     },
   });
@@ -76,209 +79,310 @@ export default function ManualEntry() {
   };
 
   const products = [
-    "Home Loan",
-    "Car Loan", 
-    "Personal Loan",
     "Credit Card",
+    "Personal Loan", 
+    "Insurance",
+    "Home Loan",
+    "Car Loan",
     "Business Loan",
-    "Education Loan",
   ];
 
-  const employmentTypes = [
-    "Salaried",
-    "Self Employed",
-    "Business Owner",
-    "Freelancer",
-    "Retired",
-    "Student",
+  const incomeLevels = [
+    "₹25,000",
+    "₹50,000",
+    "₹1,00,000",
+    "₹2,00,000+",
+  ];
+
+  const contactMethods = [
+    "WhatsApp",
+    "Phone",
+    "In-Person",
   ];
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column */}
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Full Name *</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter customer name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="+91 9876543210" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input placeholder="customer@email.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <FormField
-              control={form.control}
-              name="product"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Product Interest *</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Product" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {products.map((product) => (
-                        <SelectItem key={product} value={product}>
-                          {product}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="monthlyIncome"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Monthly Income</FormLabel>
-                    <FormControl>
-                      <Input placeholder="₹50,000" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="city"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>City</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Delhi" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          {/* Right Column */}
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="loanAmount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Loan Amount Required</FormLabel>
-                  <FormControl>
-                    <Input placeholder="₹25,00,000" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="employmentType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Employment Type</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select Employment" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {employmentTypes.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="notes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Notes</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="Additional notes about the lead..."
-                      className="min-h-24"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <div className="flex items-center space-x-2">
-              <Checkbox 
-                id="repeat-lead" 
-                checked={isRepeatLead}
-                onCheckedChange={setIsRepeatLead}
-              />
-              <Label htmlFor="repeat-lead" className="text-sm text-slate-700">
-                Repeat lead (pre-fill known information)
-              </Label>
-            </div>
-
-            <Button 
-              type="submit" 
-              className="w-full bg-primary hover:bg-emerald-600"
-              disabled={addLeadMutation.isPending}
-            >
-              {addLeadMutation.isPending ? "Adding Lead..." : "Add Lead"}
-            </Button>
-          </div>
+    <div className="w-full max-w-5xl mx-auto p-4 md:p-6">
+      <Card className="shadow-lg border-0 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 dark:from-gray-900 dark:via-blue-950/30 dark:to-indigo-950/40">
+        <div className="text-center p-6 border-b border-gray-200/50">
+          <h2 className="text-2xl md:text-3xl font-bold gradient-text mb-2">Add New Lead</h2>
+          <p className="text-gray-600 dark:text-gray-300 text-sm md:text-base">
+            Enter lead details manually for AI scoring and immediate processing
+          </p>
         </div>
-      </form>
-    </Form>
+        
+        <div className="p-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              
+              {/* Basic Information Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 border-l-4 border-blue-500 pl-3">
+                  Basic Information
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Lead Name *</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="e.g., Raj Kumar" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Phone *</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="9876543210" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</FormLabel>
+                        <FormControl>
+                          <Input 
+                            type="email"
+                            placeholder="raj@example.com" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Address Information Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 border-l-4 border-green-500 pl-3">
+                  Address Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Address</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="e.g., 123 Main Street" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">City</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Mumbai" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="state"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">State</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Maharashtra" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="pincode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Pincode</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="400001" 
+                            className="h-11 focus-ring border-gray-300" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Product & Financial Information Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 border-l-4 border-purple-500 pl-3">
+                  Product & Financial Details
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="product"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Product Interest *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-11 focus-ring border-gray-300">
+                              <SelectValue placeholder="Select product" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {products.map((product) => (
+                              <SelectItem key={product} value={product}>
+                                {product}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="incomeLevel"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Income Level</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-11 focus-ring border-gray-300">
+                              <SelectValue placeholder="Select income" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {incomeLevels.map((income) => (
+                              <SelectItem key={income} value={income}>
+                                {income}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="contactMethod"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Contact Method</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="h-11 focus-ring border-gray-300">
+                              <SelectValue placeholder="How to contact" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {contactMethods.map((method) => (
+                              <SelectItem key={method} value={method}>
+                                {method}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+
+              {/* Additional Information Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 border-l-4 border-orange-500 pl-3">
+                  Additional Information
+                </h3>
+                
+                <FormField
+                  control={form.control}
+                  name="notes"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-gray-700 dark:text-gray-300">Short Notes about Lead</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Add any relevant notes about this lead..."
+                          className="min-h-[100px] focus-ring border-gray-300 resize-none"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <Button 
+                type="submit" 
+                className="w-full h-12 text-base font-semibold gradient-primary text-white shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50"
+                disabled={addLeadMutation.isPending}
+              >
+                {addLeadMutation.isPending ? (
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    Adding Lead...
+                  </div>
+                ) : (
+                  "Add Lead & Generate AI Score"
+                )}
+              </Button>
+            </form>
+          </Form>
+        </div>
+      </Card>
+    </div>
   );
 }
