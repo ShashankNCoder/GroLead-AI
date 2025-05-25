@@ -13,20 +13,25 @@ export const leads = pgTable("leads", {
   name: text("name").notNull(),
   phone: text("phone").notNull(),
   email: text("email"),
+  address: text("address"),
   city: text("city"),
+  state: text("state"),
+  pincode: text("pincode"),
   product: text("product").notNull(),
-  loanAmount: text("loan_amount"),
-  monthlyIncome: text("monthly_income"),
-  employmentType: text("employment_type"),
-  notes: text("notes"),
+  incomeLevel: text("income_level"),
   source: text("source").notNull().default("manual"), // manual, csv, ocr, scraper
+  lastContacted: timestamp("last_contacted"),
+  contactMethod: text("contact_method"), // WhatsApp, Phone, In-Person
+  pastInteractions: integer("past_interactions").default(0),
   status: text("status").notNull().default("new"), // new, contacted, converted, dropped
+  notes: text("notes"),
+  whatsappStatus: text("whatsapp_status").default("not_sent"), // not_sent, sent, read, replied
   aiScore: integer("ai_score").default(0),
   aiReason: text("ai_reason"),
   aiType: text("ai_type"), // hot, warm, cold, low
   bestContactTime: text("best_contact_time"),
-  whatsappStatus: text("whatsapp_status").default("not_sent"), // not_sent, sent, read, replied
-  lastContacted: timestamp("last_contacted"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const messageTemplates = pgTable("message_templates", {
