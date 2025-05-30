@@ -55,14 +55,15 @@ export default function LeadSelection({ selectedLeads, onSelectionChange }: Lead
     return gradients[index % gradients.length];
   };
 
-  const getScoreColor = (score: number) => {
+  const getScoreColor = (score: number | null) => {
+    if (!score) return "bg-slate-100 text-slate-700";
     if (score >= 80) return "bg-green-100 text-green-700";
     if (score >= 60) return "bg-orange-100 text-orange-700";
     if (score >= 40) return "bg-blue-100 text-blue-700";
     return "bg-slate-100 text-slate-700";
   };
 
-  const getWhatsAppStatusColor = (status: string) => {
+  const getWhatsAppStatusColor = (status: string | null) => {
     switch (status) {
       case "read":
       case "replied":
@@ -75,25 +76,11 @@ export default function LeadSelection({ selectedLeads, onSelectionChange }: Lead
     }
   };
 
-  const getWhatsAppStatusText = (status: string) => {
-    switch (status) {
-      case "read":
-        return "Sent & Read";
-      case "replied":
-        return "Replied";
-      case "sent":
-        return "Sent";
-      case "not_sent":
-      default:
-        return "Not Sent";
-    }
-  };
-
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle>Select Leads to Engage</CardTitle>
+          <CardTitle className="font-poppins text-lg">Select Leads to Engage</CardTitle>
           <div className="flex items-center space-x-2">
             <Checkbox
               id="select-all"
@@ -125,9 +112,6 @@ export default function LeadSelection({ selectedLeads, onSelectionChange }: Lead
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">
                   Score
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase">
-                  WhatsApp Status
                 </th>
               </tr>
             </thead>
@@ -172,21 +156,13 @@ export default function LeadSelection({ selectedLeads, onSelectionChange }: Lead
                       )}
                     </td>
                     <td className="px-4 py-3">
-                      {lead.aiScore > 0 ? (
+                      {lead.aiScore ? (
                         <Badge className={`${getScoreColor(lead.aiScore)} text-xs`}>
                           {lead.aiScore}
                         </Badge>
                       ) : (
                         <span className="text-xs text-slate-400">Not scored</span>
                       )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-2 h-2 ${getWhatsAppStatusColor(lead.whatsappStatus)} rounded-full`} />
-                        <span className="text-sm text-slate-600">
-                          {getWhatsAppStatusText(lead.whatsappStatus)}
-                        </span>
-                      </div>
                     </td>
                   </tr>
                 ))

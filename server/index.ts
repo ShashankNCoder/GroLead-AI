@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { initializeDatabase } from "./supabase";
 
 const app = express();
 app.use(express.json());
@@ -38,17 +38,20 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Initialize Supabase database
-  await initializeDatabase();
-  
   const server = await registerRoutes(app);
 
-  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  // Catch-all for unknown API routes
+  app.use('/api', (req, res) => {
+    console.log('Unknown API route:', req.method, req.originalUrl);
+    res.status(404).json({ error: 'API route not found' });
+  });
+
+  // Global error handling middleware
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.error('Unhandled error:', err);
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
-
-    res.status(status).json({ message });
-    throw err;
+    res.status(status).json({ error: message });
   });
 
   // importantly only setup vite in development and after
@@ -64,11 +67,7 @@ app.use((req, res, next) => {
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
   const port = 5000;
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
+  server.listen(port, () => {
     log(`serving on port ${port}`);
   });
 })();

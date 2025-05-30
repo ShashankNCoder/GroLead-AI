@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Lead, InsertLead } from "@shared/schema";
+import { supabase } from "@/lib/supabase";
 
 export function useLeads() {
   const { toast } = useToast();
@@ -12,16 +12,31 @@ export function useLeads() {
     isLoading,
     error,
   } = useQuery<Lead[]>({
-    queryKey: ["/api/leads"],
+    queryKey: ["leads"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .order("created_at", { ascending: false });
+      
+      if (error) throw error;
+      return data;
+    },
   });
 
   const createLeadMutation = useMutation({
     mutationFn: async (leadData: InsertLead) => {
-      await apiRequest("POST", "/api/leads", leadData);
+      const { data, error } = await supabase
+        .from("leads")
+        .insert(leadData)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leads"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
       toast({
         title: "Lead Created",
         description: "New lead has been added successfully.",
@@ -38,11 +53,18 @@ export function useLeads() {
 
   const updateLeadMutation = useMutation({
     mutationFn: async ({ id, data }: { id: number; data: Partial<Lead> }) => {
-      await apiRequest("PUT", `/api/leads/${id}`, data);
+      const { data: updatedLead, error } = await supabase
+        .from("leads")
+        .update(data)
+        .eq("id", id)
+        .select()
+        .single();
+      
+      if (error) throw error;
+      return updatedLead;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leads"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
       toast({
         title: "Lead Updated",
         description: "Lead has been updated successfully.",
@@ -59,11 +81,15 @@ export function useLeads() {
 
   const deleteLeadMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/leads/${id}`);
+      const { error } = await supabase
+        .from("leads")
+        .delete()
+        .eq("id", id);
+      
+      if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leads"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
       toast({
         title: "Lead Deleted",
         description: "Lead has been deleted successfully.",
@@ -80,10 +106,29 @@ export function useLeads() {
 
   const scoreLeadMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("POST", `/api/leads/${id}/score`);
+      const { data: lead, error: fetchError } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("id", id)
+        .single();
+      
+      if (fetchError) throw fetchError;
+
+      // Calculate score based on lead data
+      const score = calculateLeadScore(lead);
+      
+      const { data: updatedLead, error: updateError } = await supabase
+        .from("leads")
+        .update({ aiScore: score })
+        .eq("id", id)
+        .select()
+        .single();
+      
+      if (updateError) throw updateError;
+      return updatedLead;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leads"] });
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
       toast({
         title: "Lead Scored",
         description: "Lead has been scored successfully.",
@@ -100,11 +145,25 @@ export function useLeads() {
 
   const batchScoreMutation = useMutation({
     mutationFn: async () => {
-      await apiRequest("POST", "/api/leads/score-all");
+      const { data: leads, error: fetchError } = await supabase
+        .from("leads")
+        .select("*");
+      
+      if (fetchError) throw fetchError;
+
+      const updates = leads.map(lead => ({
+        id: lead.id,
+        aiScore: calculateLeadScore(lead)
+      }));
+
+      const { error: updateError } = await supabase
+        .from("leads")
+        .upsert(updates);
+      
+      if (updateError) throw updateError;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/leads"] });
-      queryClient.invalidateQueries({ queryKey: ["/api/analytics"] });
+      queryClient.invalidateQueries({ queryKey: ["leads"] });
       toast({
         title: "Batch Scoring Complete",
         description: "All leads have been scored successfully.",
@@ -118,6 +177,18 @@ export function useLeads() {
       });
     },
   });
+
+  // Helper function to calculate lead score
+  const calculateLeadScore = (lead: Lead) => {
+    let score = 50; // Base score
+    
+    // Add points based on lead data
+    if (lead.status === "converted") score += 20;
+    if (lead.pastInteractions && lead.pastInteractions > 0) score += 10;
+    if (lead.incomeLevel) score += 10;
+    
+    return Math.min(100, score); // Cap at 100
+  };
 
   // Helper functions
   const getLeadsByStatus = (status: string) => {
@@ -194,9 +265,19 @@ export function useLeads() {
 }
 
 export function useLead(id: number) {
-  const { data: leads = [] } = useQuery<Lead[]>({
-    queryKey: ["/api/leads"],
+  const { data: lead, isLoading, error } = useQuery<Lead>({
+    queryKey: ["leads", id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("id", id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
   });
 
-  return leads.find(lead => lead.id === id);
+  return { lead, isLoading, error };
 }

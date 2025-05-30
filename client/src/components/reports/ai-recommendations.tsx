@@ -3,8 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Lightbulb, Target, TrendingUp, Clock, Users } from "lucide-react";
 
+interface AnalyticsData {
+  conversionRate: number;
+  averageScore: number;
+  revenue?: number;
+}
+
 export default function AIRecommendations() {
-  const { data: analytics } = useQuery({
+  const { data: analytics } = useQuery<AnalyticsData>({
     queryKey: ["/api/analytics"],
   });
 
@@ -34,8 +40,8 @@ export default function AIRecommendations() {
       priority: "medium",
       icon: TrendingUp,
       title: "Improve Follow-up Strategy",
-      description: "Leads with scores 70-80 need 2-3 follow-ups for conversion. Automate follow-up sequences for warm leads.",
-      impact: "Expected 20% increase in warm lead conversions",
+      description: "Leads with scores 70-80 need 2-3 follow-ups for conversion. Automate follow-up sequences for Medium Priority leads.",
+      impact: "Expected 20% increase in Medium Priority lead conversions",
       action: "Set up automated sequences",
       color: "yellow",
     },
@@ -53,12 +59,14 @@ export default function AIRecommendations() {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case "high":
+      case "high-priority":
         return "bg-red-100 text-red-700";
-      case "medium":
+      case "medium-priority":
         return "bg-yellow-100 text-yellow-700";
-      case "low":
+      case "low-priority":
         return "bg-green-100 text-green-700";
+      case "very-low-priority":
+        return "bg-slate-100 text-slate-700";
       default:
         return "bg-slate-100 text-slate-700";
     }
@@ -81,42 +89,40 @@ export default function AIRecommendations() {
 
   return (
     <Card className="bg-gradient-to-br from-indigo-50 to-blue-50 border-indigo-200">
-      <CardHeader>
+      <CardHeader className="p-4 sm:p-6">
         <div className="flex items-center space-x-3">
           <div className="w-8 h-8 bg-gradient-to-br from-indigo-500 to-blue-600 rounded-lg flex items-center justify-center">
             <Brain className="h-5 w-5 text-white" />
           </div>
-          <CardTitle>AI Recommendations</CardTitle>
+          <CardTitle className="text-lg sm:text-xl">AI Recommendations</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 p-4 sm:p-6">
         {recommendations.map((rec, index) => {
           const Icon = rec.icon;
           
           return (
-            <div key={index} className="bg-white/60 backdrop-blur rounded-lg p-4">
+            <div key={index} className="bg-white/60 backdrop-blur rounded-lg p-3 sm:p-4">
               <div className="flex items-start space-x-3">
-                <div className={`w-6 h-6 ${getIconColor(rec.color)} rounded-full flex items-center justify-center flex-shrink-0 mt-0.5`}>
+                <div className={`w-6 h-6 ${getIconColor(rec.color)} rounded-full flex items-center justify-center flex-shrink-0 mt-1`}>
                   <Icon className="h-3 w-3 text-white" />
                 </div>
-                <div className="flex-1">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <p className="font-medium text-slate-900 mb-1">{rec.title}</p>
-                      <Badge className={`${getPriorityColor(rec.priority)} text-xs`}>
-                        {rec.priority} priority
-                      </Badge>
-                    </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2">
+                    <p className="font-medium text-slate-900 text-sm sm:text-base">{rec.title}</p>
+                    <Badge className={`${getPriorityColor(rec.priority)} text-xs w-fit`}>
+                      {rec.priority} priority
+                    </Badge>
                   </div>
                   
-                  <p className="text-sm text-slate-600 mb-3">{rec.description}</p>
+                  <p className="text-xs sm:text-sm text-slate-600 mb-3">{rec.description}</p>
                   
-                  <div className="bg-white/80 rounded-md p-3 space-y-2">
-                    <div className="flex items-center justify-between text-xs">
+                  <div className="bg-white/80 rounded-md p-2 sm:p-3 space-y-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs gap-1">
                       <span className="text-slate-500">Expected Impact:</span>
                       <span className="font-medium text-green-600">{rec.impact}</span>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between text-xs gap-1">
                       <span className="text-slate-500">Recommended Action:</span>
                       <span className="font-medium text-slate-700">{rec.action}</span>
                     </div>
@@ -127,51 +133,6 @@ export default function AIRecommendations() {
           );
         })}
 
-        {/* AI Insights Summary */}
-        <div className="bg-white/60 backdrop-blur rounded-lg p-4 border-2 border-indigo-200/50">
-          <div className="flex items-center space-x-2 mb-3">
-            <Lightbulb className="h-5 w-5 text-indigo-600" />
-            <h4 className="font-medium text-slate-900">Key Insights</h4>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-indigo-600">
-                {analytics?.conversionRate || "18.2"}%
-              </div>
-              <div className="text-xs text-slate-500">Overall Conversion Rate</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">₹2.4L</div>
-              <div className="text-xs text-slate-500">Monthly Revenue</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">
-                {analytics?.averageScore || 76}
-              </div>
-              <div className="text-xs text-slate-500">Average Lead Score</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Center */}
-        <div className="bg-gradient-to-r from-indigo-500 to-blue-600 rounded-lg p-4 text-white">
-          <h4 className="font-medium mb-2">Quick Actions</h4>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <button className="bg-white/20 hover:bg-white/30 rounded-md px-3 py-2 transition-colors">
-              Schedule Evening Campaign
-            </button>
-            <button className="bg-white/20 hover:bg-white/30 rounded-md px-3 py-2 transition-colors">
-              Create Follow-up Sequence
-            </button>
-            <button className="bg-white/20 hover:bg-white/30 rounded-md px-3 py-2 transition-colors">
-              Export High-Score Leads
-            </button>
-            <button className="bg-white/20 hover:bg-white/30 rounded-md px-3 py-2 transition-colors">
-              View Regional Analytics
-            </button>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

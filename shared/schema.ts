@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, real, json } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, real, json, numeric } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -19,16 +19,16 @@ export const leads = pgTable("leads", {
   pincode: text("pincode"),
   product: text("product").notNull(),
   incomeLevel: text("income_level"),
-  source: text("source").notNull().default("manual"), // manual, csv, ocr, scraper
+  source: text("source").notNull().default("manual"), // manual, csv, ocr
+  loanAmount: numeric("loan_amount"),
   lastContacted: timestamp("last_contacted"),
   contactMethod: text("contact_method"), // WhatsApp, Phone, In-Person
   pastInteractions: integer("past_interactions").default(0),
   status: text("status").notNull().default("new"), // new, contacted, converted, dropped
   notes: text("notes"),
-  whatsappStatus: text("whatsapp_status").default("not_sent"), // not_sent, sent, read, replied
   aiScore: integer("ai_score").default(0),
   aiReason: text("ai_reason"),
-  aiType: text("ai_type"), // hot, warm, cold, low
+  aiType: text("ai_type"), // High Priority, Medium Priority, Low Priority, Very Low Priority
   bestContactTime: text("best_contact_time"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -84,7 +84,17 @@ export type InsertUser = z.infer<typeof insertUserSchema>;
 export type Lead = typeof leads.$inferSelect;
 export type InsertLead = z.infer<typeof insertLeadSchema>;
 
-export type MessageTemplate = typeof messageTemplates.$inferSelect;
+export interface MessageTemplate {
+  id: number;
+  name: string;
+  content: string;
+  category: string;
+  usage_count: number;
+  response_rate: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export type InsertMessageTemplate = z.infer<typeof insertMessageTemplateSchema>;
 
 export type WhatsappMessage = typeof whatsappMessages.$inferSelect;
