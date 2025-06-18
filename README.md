@@ -157,9 +157,9 @@ Required environment variables:
 
 ## 📼Prototype Demo Video
 
-'''
+```
 https://drive.google.com/file/d/1_SfGJmUOtptUEieUH48drQ8EIc1aXre3/view?usp=sharing
-'''
+```
 
 ## 🤝 Contributing
 
