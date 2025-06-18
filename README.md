@@ -155,6 +155,12 @@ Required environment variables:
 - `OPENAI_API_KEY`: OpenAI API key for AI features
 - `WHATSAPP_API_KEY`: ultramsg.com WhatsApp API key
 
+## 📼Prototype Demo Video
+
+'''
+https://drive.google.com/file/d/1_SfGJmUOtptUEieUH48drQ8EIc1aXre3/view?usp=sharing
+'''
+
 ## 🤝 Contributing
 
 1. Fork the repository
